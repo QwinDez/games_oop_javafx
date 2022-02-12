@@ -23,30 +23,23 @@ public class BishopBlack implements Figure {
                     String.format("Could not way by diagonal from %s to %s", position, dest)
             );
         }
-        int size = (int) Math.sqrt((Math.pow(dest.getX() - position().getX(), 2)));
+        int size = Math.abs(dest.getX() - position().getX());
         Cell[] steps = new Cell[size];
-        int deltaX = position.getX();
-        int deltaY = position.getY();
-        int x = 1;
-        int y = -1;
+        int deltaX = position.getX() < dest.getX() ? 1 : -1;
+        int deltaY = position.getY() < dest.getY() ? 1 : -1;
+        int x = position.getX();
+        int y = position.getY();
         for (int index = 0; index < size; index++) {
-            x = (position.getX() < dest.getX() || position.getY() < dest.getY())
-                    ? deltaX + 1 + index : deltaX - 1 - index;
-            y = deltaY - 1 - index;
+            x += deltaX;
+            y += deltaY;
             steps[index] = Cell.findBy(x, y);
         }
         return steps;
     }
 
     public boolean isDiagonal(Cell source, Cell dest) {
-        boolean result = false;
-        double x = Math.pow((dest.getX() - source.getX()), 2);
-        double y = Math.pow((dest.getY() - source.getY()), 2);
-        if (x == y && dest.getY() <= 8 && dest.getY() > 0
-                && dest.getX() <= 8 && dest.getX() > 0) {
-            result = true;
-        }
-        return result;
+        return Math.abs(dest.getX() - source.getX()) == Math.abs(dest.getY() - source.getY())
+                && dest.getY() <= 8 && dest.getY() > 0 && dest.getX() <= 8 && dest.getX() > 0;
     }
 
     @Override

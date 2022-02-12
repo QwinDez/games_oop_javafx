@@ -13,18 +13,20 @@ public final class Logic {
     }
 
     public void move(Cell source, Cell dest)
-            throws FigureNotFoundException, ImpossibleMoveException, OccupiedCellException {
-        int index = findBy(source);
-        Cell[] steps = figures[index].way(dest);
-        free(steps);
-        figures[index] = figures[index].copy(dest);
+            throws ImpossibleMoveException, FigureNotFoundException, OccupiedCellException {
+        try {
+            int index = findBy(source);
+            Cell[] steps = figures[index].way(dest);
+            free(steps);
+            figures[index] = figures[index].copy(dest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean free(Cell[] steps) throws OccupiedCellException {
         for (int index = 0; index < figures.length; index++) {
-            if (figures[index] == null) {
-                break;
-            } else if (steps[index] == figures[index].position()) {
+            if (figures[index] != null && steps[index] == figures[index].position()) {
                 throw new OccupiedCellException();
             }
         }
